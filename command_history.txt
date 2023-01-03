@@ -1,0 +1,15 @@
+# crates.io version 0.13.0 of probe-rs-cli
+RUST_LOG=trace probe-rs-cli dump 0x42000000 1 --chip riscv --protocol jtag --probe 0403:6014 --speed 2000 2>&1 | tee dump_1word_failure_probers_0.13.0.log
+RUST_LOG=trace probe-rs-cli dump 0x42000000 1 --chip esp32c3 --protocol jtag --probe 0403:6014 --speed 2000 2>&1 | tee dump_1word_success_probers_0.13.0.log
+RUST_LOG=trace probe-rs-cli dump 0x42000000 1 --chip riscv --protocol jtag --probe 0403:6014 --speed 2000 2>&1 | tee dump_1word_success_riscv_probers_0.13.0.log
+
+RUST_LOG=trace probe-rs-cli reset --chip riscv --protocol jtag --probe 0403:6014 --speed 2000 2>&1 | tee reset_riscv_probers_0.13.0.log
+RUST_LOG=trace probe-rs-cli reset --chip esp32c3 --protocol jtag --probe 0403:6014 --speed 2000 2>&1 | tee reset_esp32c3_probers_0.13.0.log
+
+esptool.py erase_flash
+RUST_LOG=trace probe-rs-cli run --chip esp32c3 --protocol jtag --probe 0403:6014 ~/vc/rust/esp32c3/esp-hal-template-defmt/target/riscv32imac-unknown-none-elf/release/esp_hal_template_defmt 2>&1 | tee esp32c3_ftdi_traces/run-esp32c3-blinky.log
+
+
+# ftdi-impl-fixes
+RUST_LOG=trace ../target/release/probe-rs-cli reset --chip esp32c3 --protocol jtag --probe 0403:6014 --speed 2000 2>&1 | tee reset_ftdi_impl_fixes.log
+RUST_LOG=trace ../target/release/probe-rs-cli dump 0x42000000 1 --chip esp32c3 --protocol jtag --probe 0403:6014 --speed 2000 2>&1 | tee dump_1word_success_ftdi_impl_fixes.log
